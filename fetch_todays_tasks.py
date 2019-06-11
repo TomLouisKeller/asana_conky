@@ -57,38 +57,53 @@ def get_due_on(gid):
 def get_date_today():
     return strftime("%Y-%m-%d", gmtime())
 
-# Sort the tasks in the list by due_date
-def sort_tasks_by_due_date(tasks):
-
-    logger.debug(json.dumps(tasks, sort_keys=False, indent=2))
-
-    return tasks
-
-
 # Create label from task
 # Format: #date# - #parent_name# -> #name#
 def get_task_label(gid):
     task = get_task(gid)['data']
     
-    task_label=""
+    task_label = task['due_on'] + " -> "
+
+    # Recursively get the names of all parent tasks
+    logger.debug('Get parent of task: {}'.format(task['name']))
+
+    parents_name_string = get_parent_task(task['parent'])
+    if parents_name_string is not "":
+            parents_name_string += " - > "
+
+    task_label += parents_name_string
     
-    task_label += task['due_on']
+    task_label += task['name']
 
-    task_label += " -> "
+    logger.debug("DueToday: {} - {}".format(task['gid'], task['name']))
+    logger.debug(get_task(task['gid']))
 
-    # TODO: Could do this recursive (parent of parent etc. get parent's gid and get the task, see if it has a parent)
-    if task['parent'] is not None:
-        task_label+=task['parent']['name']
-        task_label+=" -> "
-
-    task_label+=task['name']
-    #logger.debug("DueToday: {} - {}".format(task['gid'], task['name']))
-    #logger.debug(get_task(task['gid']))
-    #logger.debug()
     return task_label
 
-#def get_parent_task(gid):
-#    pass
+def get_parent_task(parent):
+
+    if parent is not None and 'gid' in parent and 'name' in parent:
+        logger.debug("Parent gid: {} name: {}".format(parent['gid'], parent['name']))
+
+        parent = get_task(parent['gid'])['data']
+        parents_name_string = get_parent_task(parent['parent'])
+
+        if parents_name_string is not "":
+            parents_name_string += " - > "
+
+        parents_name_string += parent['name']
+
+        return parents_name_string
+    else:
+        return ""
+
+# logger.debug(get_parent_task(dict({'gid':'1125180580548326', 'name':'Conky'})))
+
+
+# Sort the tasks in the list by due_date
+def sort_tasks_label(tasks):
+    tasks.sort()
+    return tasks
 
 def print_to_file(content: list):
     file = open(output_file_path,"w") 
@@ -98,22 +113,24 @@ def print_to_file(content: list):
 
 # Here the magic happens
 def main():
+    # Fetch all tasks from the "My Tasks" list
     tasks = get_users_tasks()
     tasks = tasks['data']
-    #tasks = tasks[0:30]
 
     # Remove all tasks that aren't due today or prior to that
     tasks = filter_due_tasks(tasks)
 
-    # Sort by due date
-    tasks = sort_tasks_by_due_date(tasks)
-
-    logger.debug()
+    # Create labels(simple text strings) from tasks
     logger.debug("Due today tasks:")
     task_labels = list()
     for task in tasks:
+        logger.debug(task['name'])
         task_labels.append(get_task_label(task['gid']))
     
+    # Sort tasks by due date
+    task_labels = sort_tasks_label(task_labels)
+
+    # Print labels to file
     print_to_file(task_labels)
 
     logger.debug('Done')
