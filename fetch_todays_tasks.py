@@ -9,6 +9,7 @@
 import requests
 import json
 from time import gmtime, strftime
+from helper import get_logger
 from configuration import Configuration
 
 # Get configuration
@@ -16,6 +17,8 @@ config = Configuration()
 personal_access_token = config.get('personal_access_token')
 user_task_list_gid = config.get('user_task_list_gid')
 output_file_path = config.get('output_file_path')
+
+logger = get_logger()
 
 headers = {'Authorization': 'Bearer {personal_access_token}'.format(personal_access_token=personal_access_token)}
 
@@ -32,7 +35,7 @@ def filter_due_tasks(tasks):
     today = get_date_today()
     due_tasks = list()
     for task in tasks:
-        print("FromAllTasks: {} - {}".format(task['gid'], task['name']))
+        logger.debug("FromAllTasks: {} - {}".format(task['gid'], task['name']))
         due_on = get_due_on(task['gid'])
         if due_on is not None and due_on <= today:
             due_tasks.append(task)
@@ -54,6 +57,14 @@ def get_due_on(gid):
 def get_date_today():
     return strftime("%Y-%m-%d", gmtime())
 
+# Sort the tasks in the list by due_date
+def sort_tasks_by_due_date(tasks):
+
+    logger.debug(json.dumps(tasks, sort_keys=False, indent=2))
+
+    return tasks
+
+
 # Create label from task
 # Format: #date# - #parent_name# -> #name#
 def get_task_label(gid):
@@ -71,9 +82,9 @@ def get_task_label(gid):
         task_label+=" -> "
 
     task_label+=task['name']
-    #print("DueToday: {} - {}".format(task['gid'], task['name']))
-    #print(get_task(task['gid']))
-    #print()
+    #logger.debug("DueToday: {} - {}".format(task['gid'], task['name']))
+    #logger.debug(get_task(task['gid']))
+    #logger.debug()
     return task_label
 
 #def get_parent_task(gid):
@@ -95,16 +106,16 @@ def main():
     tasks = filter_due_tasks(tasks)
 
     # Sort by due date
-    #tasks = sort_tasks_by_due_date(tasks)
+    tasks = sort_tasks_by_due_date(tasks)
 
-    print()
-    print("Due today tasks:")
+    logger.debug()
+    logger.debug("Due today tasks:")
     task_labels = list()
     for task in tasks:
         task_labels.append(get_task_label(task['gid']))
     
     print_to_file(task_labels)
 
-    print('Done')
+    logger.debug('Done')
 
 main()
