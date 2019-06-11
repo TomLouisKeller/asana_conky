@@ -13,7 +13,7 @@ def get_logger():
 
     logging_path = "tmp/{now}.log".format(now=str(datetime.now()))
     level = logging.DEBUG
-    format = '%(asctime)s - %(message)s'
+    format = '%(asctime)s - %(lineno)d - %(message)s'
 
     format = logging.Formatter(format)
 
