@@ -15,13 +15,14 @@ config = Configuration()
 personal_access_token = config.get('personal_access_token')
 user_task_list_gid = config.get('user_task_list_gid')
 output_file_path = config.get('output_file_path')
+logging_path = config.get('logging_path')
 
-logger = get_logger()
+logger = get_logger(logging_path, "todays_tasks")
 
 # Here the magic happens
 def main():
-    data_fetcher = DataFetcher(personal_access_token)
-    asana_service = AsanaService(data_fetcher)
+    data_fetcher = DataFetcher(personal_access_token, logger)
+    asana_service = AsanaService(data_fetcher, logger)
 
     # Fetch all tasks from the "My Tasks" list
     tasks = data_fetcher.fetch_users_tasks(user_task_list_gid)

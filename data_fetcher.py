@@ -1,9 +1,11 @@
 import requests
+from helper import get_logger
 
 class DataFetcher:
 
-    def __init__(self, personal_access_token):
+    def __init__(self, personal_access_token, logger=get_logger()):
         self.headers = {'Authorization': 'Bearer {personal_access_token}'.format(personal_access_token=personal_access_token)}
+        self.logger=logger
 
     # Get all tasks in the "My Tasks"-List
     def fetch_users_tasks(self, user_task_list_gid):

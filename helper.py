@@ -7,12 +7,15 @@ def get_current_location():
 def get_absolute_path(filename: str):
     return os.path.join(get_current_location(), filename)
 
-def get_logger():
+def get_logger(inpath="tmp", file_name_prefix=""):
     from datetime import datetime
     import logging
     import sys
 
-    logging_path = "tmp/{now}.log".format(now=str(datetime.now()))
+    if file_name_prefix is not "":
+        file_name_prefix += "-"
+
+    logging_path = "{path}/{prefix}{now}.log".format(path=inpath, prefix=file_name_prefix, now=str(datetime.now()))
     level = logging.DEBUG
     format = '%(asctime)s - %(lineno)d - %(message)s'
 
@@ -25,10 +28,10 @@ def get_logger():
     console_handler.setLevel(level)
     logger.addHandler(console_handler)
 
-    #file_handler = logging.FileHandler(logging_path)
-    #file_handler.setFormatter(format)
-    #file_handler.setLevel(level)
-    #logger.addHandler(file_handler)
+    file_handler = logging.FileHandler(logging_path)
+    file_handler.setFormatter(format)
+    file_handler.setLevel(level)
+    logger.addHandler(file_handler)
 
     return logger
 

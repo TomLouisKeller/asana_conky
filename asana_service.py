@@ -4,9 +4,9 @@ from helper import get_date_today, get_logger
 
 class AsanaService:
 
-    def __init__(self, data_fetcher: DataFetcher):
-        self.logger = get_logger()
+    def __init__(self, data_fetcher: DataFetcher, logger = get_logger()):
         self.data_fetcher = data_fetcher
+        self.logger = logger
 
     def fetch_parent_task_label(self, parent):
         if parent is not None and 'gid' in parent and 'name' in parent:
@@ -72,8 +72,3 @@ class AsanaService:
         self.logger.debug(self.data_fetcher.fetch_task(task['gid']))
 
         return task_label
-
-    # Sort the tasks in the list by due_date
-    def sort_task_labels(self, tasks):
-        tasks.sort()
-        return tasks

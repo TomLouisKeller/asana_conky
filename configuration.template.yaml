@@ -1,3 +1,9 @@
 personal_access_token: ''
 user_task_list_gid: ''
 output_file_path: ''
+logging_path: '/var/log/asana_fetcher'
+
+tags:
+  - "Main Project"
+  - "Side Project"
+  - "High Priority"
