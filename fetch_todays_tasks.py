@@ -35,7 +35,7 @@ def main():
     task_labels = asana_service.extract_task_labels(tasks)
 
     # Sort tasks by due date
-    task_labels = asana_service.sort_task_labels(task_labels)
+    task_labels.sort()
 
     # Print labels to file
     print_to_file(output_file_path, task_labels)
