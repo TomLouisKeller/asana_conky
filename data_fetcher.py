@@ -1,9 +1,9 @@
 import requests
-from helper import get_logger
+from logging import Logger
 
 class DataFetcher:
 
-    def __init__(self, personal_access_token, logger=get_logger()):
+    def __init__(self, personal_access_token, logger: Logger):
         self.headers = {'Authorization': 'Bearer {personal_access_token}'.format(personal_access_token=personal_access_token)}
         self.logger=logger
 
