@@ -64,7 +64,7 @@ class AsanaService:
 
         parents_name_string = self.fetch_parent_task_label(task['parent'])
         if parents_name_string is not "":
-                parents_name_string += " - > "
+                parents_name_string += " -> "
 
         task_label += parents_name_string
         
