@@ -7,7 +7,18 @@ def get_current_location():
 
 
 def get_absolute_path(filename: str):
-    return os.path.join(get_current_location(), filename)
+    if filename.startswith('/'):
+        # print("root -> ", filename)
+        return filename
+    elif filename.startswith('~/'):
+        # print("home -> ", filename)
+        return filename
+    elif filename.startswith('../'):
+        # print("../ -> ", filename)
+        return os.path.join(get_current_location(), filename)
+    else:
+        # print("relative ->  ", filename)
+        return os.path.join(get_current_location(), "../", filename)
 
 
 def get_logger(inpath="tmp", file_name_prefix=""):
