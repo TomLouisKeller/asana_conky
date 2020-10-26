@@ -1,7 +1,7 @@
-import requests
 from data_fetcher import DataFetcher
 from logging import Logger
 from helper import get_date_today
+
 
 class AsanaService:
 
@@ -16,7 +16,7 @@ class AsanaService:
             parent = self.data_fetcher.fetch_task(parent['gid'])['data']
             parents_name_string = self.fetch_parent_task_label(parent['parent'])
 
-            if parents_name_string is not "":
+            if parents_name_string != "":
                 parents_name_string += " - > "
 
             parents_name_string += parent['name']
@@ -63,8 +63,8 @@ class AsanaService:
         self.logger.debug('Parent: {}'.format(task['name']))
 
         parents_name_string = self.fetch_parent_task_label(task['parent'])
-        if parents_name_string is not "":
-                parents_name_string += " -> "
+        if parents_name_string != "":
+            parents_name_string += " -> "
 
         task_label += parents_name_string
         

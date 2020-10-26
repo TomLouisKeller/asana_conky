@@ -7,10 +7,10 @@ class Configuration:
     DEFAULT_CONFIG_FILE_PATH = "configuration.yaml"
 
     def __init__(self):
-        self._config:dict = None
+        self._config: dict = None
         self._init_config()
 
-    def _init_config(self, config_file = DEFAULT_CONFIG_FILE_PATH) -> None:
+    def _init_config(self, config_file=DEFAULT_CONFIG_FILE_PATH) -> None:
         self._config = Configuration._load_yaml(get_absolute_path(config_file))
 
     @staticmethod

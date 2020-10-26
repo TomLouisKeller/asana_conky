@@ -5,7 +5,7 @@
 # list and then fetch one after another to get the due date
 # and sort out the one's that have a due date prior to, 
 # and including today
-from helper import print_to_file, get_logger
+from helper import get_logger
 from configuration import Configuration
 from asana_service import AsanaService
 from data_fetcher import DataFetcher
@@ -18,6 +18,7 @@ output_file_path = config.get('output_file_path')
 logging_path = config.get('logging_path')
 
 logger = get_logger(logging_path, "todays_tasks")
+
 
 # Here the magic happens
 def main():
@@ -43,5 +44,6 @@ def main():
 #    print_to_file(output_file_path, task_labels)
 #
 #    logger.debug('Done')
-#
+
+
 main()
