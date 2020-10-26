@@ -1,5 +1,6 @@
 ## Get all tasks that are due today or prior to today
 import asana
+from datetime import datetime
 from helper import get_date_today, print_to_file
 from configuration import Configuration
 
@@ -18,7 +19,7 @@ def main():
     client.options['client_name'] = "asana_get_due_tasks"
 
     # Request data
-    opt_fields = ['name', 'due_on']
+    opt_fields = ['name', 'due_on', 'due_at']
     tasks = client.tasks.get_tasks_for_user_task_list(config.get('user_task_list_gid'), completed_since='now', opt_fields=opt_fields, opt_pretty=True)
 
     today = get_date_today()
@@ -30,12 +31,20 @@ def main():
                 due_tasks.append(task)
 
     # Sort tasks by due date
-    due_tasks = sorted(due_tasks, key=lambda dt: dt['due_on'])
+    due_tasks = sorted(due_tasks, key=lambda dt: dt['due_at'] if dt['due_at'] else dt['due_on'])
 
     # Format
     lines = []
     for dt in due_tasks:
-        lines.append("{} - {}".format(dt['due_on'], dt['name']))
+        due_on = ""
+        if config.get('show_time') is False:
+            due_on = datetime.fromisoformat(dt['due_on']).strftime("%d.%m")
+        if dt['due_at'] is None:  # maybe we have to remove the '        ' if there no items do have due_at
+            due_on = datetime.fromisoformat(dt['due_on']).strftime("%d.%m") + '        '
+        else:
+            due_on = datetime.fromisoformat(dt['due_at'][:-1]).strftime("%d.%m %H:%M")
+
+        lines.append("{} - {}".format(due_on, dt['name']))
 
     print_to_file(config.get('output_file_path'), lines)
 
