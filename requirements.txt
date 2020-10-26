@@ -1,8 +1,1 @@
-# numpy==1.18.1
-# Keras==2.3.1
-# tensorflow==2.1.0
-# scikit-learn==0.22.2
-# pandas==1.0.1
-# pymongo==3.10.1
-# plotly==4.5.2
-# pylint==2.4.4
+asana==0.10.3

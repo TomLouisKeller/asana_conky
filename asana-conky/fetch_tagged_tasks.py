@@ -4,3 +4,6 @@
 
 # Need to figure out the tag id first: GET    /tags
 # GET    /tags
+
+
+# def get_tasks_for_tag(self, tag_gid, params=None, **options):

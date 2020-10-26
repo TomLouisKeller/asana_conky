@@ -1,49 +1,43 @@
 ## Get all tasks that are due today or prior to today
-# Unfortunately the asana api doesn't let us query
-# by due date or at least by assignee_status = inbox
-# so we have to get all the tasks in the "My Tasks"
-# list and then fetch one after another to get the due date
-# and sort out the one's that have a due date prior to, 
-# and including today
-from helper import get_logger
+import asana
+from helper import get_date_today, print_to_file
 from configuration import Configuration
-from asana_service import AsanaService
-from data_fetcher import DataFetcher
-
-# Get configuration
-config = Configuration()
-personal_access_token = config.get('personal_access_token')
-user_task_list_gid = config.get('user_task_list_gid')
-output_file_path = config.get('output_file_path')
-logging_path = config.get('logging_path')
-
-logger = get_logger(logging_path, "todays_tasks")
 
 
-# Here the magic happens
 def main():
-    data_fetcher = DataFetcher(personal_access_token, logger)
-    asana_service = AsanaService(data_fetcher, logger)
+    config = Configuration()
 
-    # Fetch all tasks from the "My Tasks" list
-    tasks = data_fetcher.fetch_users_tasks(user_task_list_gid)
-    print(tasks)
-#    tasks = tasks['data']
-#
-#    # Remove all tasks that aren't due today or prior to that
-#    tasks = asana_service.filter_due_tasks(tasks)
-#
-#    # Create labels(simple text strings) from tasks
-#    logger.debug("Due today tasks:")
-#    task_labels = asana_service.extract_task_labels(tasks)
-#
-#    # Sort tasks by due date
-#    task_labels.sort()
-#
-#    # Print labels to file
-#    print_to_file(output_file_path, task_labels)
-#
-#    logger.debug('Done')
+    if not config.get('personal_access_token'):
+        print("No value for PAT in your console environment")
+        exit(1)
+
+    # Construct an Asana client
+    client = asana.Client.access_token(config.get('personal_access_token'))
+
+    # Set things up to send the name of this script to us to show that you succeeded! This is optional.
+    client.options['client_name'] = "asana_get_due_tasks"
+
+    # Request data
+    opt_fields = ['name', 'due_on']
+    tasks = client.tasks.get_tasks_for_user_task_list(config.get('user_task_list_gid'), completed_since='now', opt_fields=opt_fields, opt_pretty=True)
+
+    today = get_date_today()
+    # Iterate over tasks, and store only the ones that are due
+    due_tasks = []
+    for task in tasks:
+        if task['due_on'] is not None:
+            if task['due_on'] <= today:
+                due_tasks.append(task)
+
+    # Sort tasks by due date
+    due_tasks = sorted(due_tasks, key=lambda dt: dt['due_on'])
+
+    # Format
+    lines = []
+    for dt in due_tasks:
+        lines.append("{} - {}".format(dt['due_on'], dt['name']))
+
+    print_to_file(config.get('output_file_path'), lines)
 
 
 main()
