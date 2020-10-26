@@ -1,6 +1,8 @@
 # Custom to this project
 tmp/
 configuration.yaml
+reference/
+output/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
