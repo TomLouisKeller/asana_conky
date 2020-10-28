@@ -39,14 +39,14 @@ def main():
         due_on = ""
         if config.get('show_time') is False:
             due_on = datetime.fromisoformat(dt['due_on']).strftime("%d.%m")
-        if dt['due_at'] is None:  # maybe we have to remove the '        ' if there no items do have due_at
+        elif dt['due_at'] is None:  # maybe we have to remove the '        ' if there no items do have due_at
             due_on = datetime.fromisoformat(dt['due_on']).strftime("%d.%m") + '        '
         else:
             due_on = datetime.fromisoformat(dt['due_at'][:-1]).strftime("%d.%m %H:%M")
 
         lines.append("{} - {}".format(due_on, dt['name']))
 
-    print_to_file(config.get('output_file_path'), lines)
+    print_to_file(config.get('output_file_path_due_tasks'), lines)
 
 
 main()

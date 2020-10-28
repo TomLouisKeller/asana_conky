@@ -1,8 +1,14 @@
 personal_access_token: ''
-user_task_list_gid: ''
-output_file_path: 'output/due-tasks.txt'
+user_task_list_gid: '' # go to "My Tasks" and copy the long id in the url
+workspace_gid: '' # https://app.asana.com/api/1.0/workspaces (or go to admin console and copy the id from the url)
+output_file_path_due_tasks: 'output/due-tasks.txt'
+output_file_path_tags: 'output/tags.txt'
 show_time: False
-tags:
+tag-names: # currently the order of the tag names is not respected, and it loads more data, so we use ids for now
   - "Main Project"
   - "Side Project"
   - "High Priority"
+tag-ids:
+  - "123"
+  - "456"
+  - "789"
