@@ -1,9 +1,9 @@
 ## Get all tasks that are due today or prior to today
 import asana
 
-from helper import get_date_today, print_to_file
-from configuration import Configuration
-from task import Task
+from .helper import get_date_today, print_to_file
+from .configuration import Configuration
+from .task import Task
 
 
 def main():

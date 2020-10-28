@@ -7,9 +7,9 @@
 import asana
 import re
 
-from helper import print_to_file
-from configuration import Configuration
-from task import Task
+from .helper import print_to_file
+from .configuration import Configuration
+from .task import Task
 
 
 def extract_tasks_from_tag(tag, client):
