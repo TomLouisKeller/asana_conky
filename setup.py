@@ -12,7 +12,7 @@ from shutil import rmtree
 from setuptools import find_packages, setup, Command
 
 # Package meta-data.
-NAME = 'asana-conky'
+NAME = 'asana_conky'
 DESCRIPTION = 'program to fetch asana tasks and write them to file'
 URL = ''
 EMAIL = 'me@tomlouiskeller.com'

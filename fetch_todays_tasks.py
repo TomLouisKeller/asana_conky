@@ -1,9 +1,9 @@
 ## Get all tasks that are due today or prior to today
 import asana
 
-from .helper import get_date_today, print_to_file
-from .configuration import Configuration
-from .task import Task
+from asana_conky.helper import get_date_today, print_to_file
+from asana_conky.configuration import Configuration
+from asana_conky.task import Task
 
 
 def main():
@@ -48,4 +48,5 @@ def main():
     print_to_file(config.get('output_file_path_due_tasks'), lines)
 
 
-main()
+if __name__ == '__main__':
+    main()

@@ -5,11 +5,10 @@
 # GET    /tags
 
 import asana
-import re
 
-from .helper import print_to_file
-from .configuration import Configuration
-from .task import Task
+from asana_conky.helper import replace_text  # , print_to_file
+from asana_conky.configuration import Configuration
+from asana_conky.task import Task
 
 
 def extract_tasks_from_tag(tag, client):
@@ -30,34 +29,6 @@ def extract_tasks_from_tag(tag, client):
     for task in tasks:
         lines.append(task.name)
     return lines
-
-
-def replace_text(file_path, start_tag, end_tag, lines):
-
-    if file_path is None or start_tag is None or end_tag is None:
-        print("Will not replace anything since file_path, start_tag or end_tag have not been provided")
-        return
-
-    # Read in the file
-    with open(file_path, 'r') as file:
-        filedata = file.read()
-
-    print(f"filedata {filedata}")
-
-    pattern = start_tag + ".*" + end_tag
-    print(f"Pattern {pattern}")
-    # regex = re.compile(r"^.*interfaceOpDataFile.*$", flags=re.MULTILINE)
-    # regex = re.compile(pattern, flags=re.MULTILINE)
-    regex = pattern
-    print(f"regex {regex}")
-
-    replaced = re.sub(regex, lines, filedata, flags=re.MULTILINE)
-
-    print(f"replaced {replaced}")
-    
-    #Write the file out again
-    with open(file_path, 'w') as file:
-        file.write(replaced)
 
 
 def by_tag_label():
@@ -127,5 +98,6 @@ def by_tag_id():
     replace_text(config.get('tagged_tasks')['output_path'], config.get('tagged_tasks')['start_tag'], config.get('tagged_tasks')['end_tag'], line_string)
 
 
-# by_tag_label()
-by_tag_id()
+if __name__ == '__main__':
+    # by_tag_label()
+    by_tag_id()
