@@ -44,14 +44,14 @@ def replace_text(file_path, start_tag, end_tag, lines):
     with open(file_path, 'r') as file:
         filedata = file.read()
 
-     print(f"filedata {filedata}")
+    print(f"filedata {filedata}")
 
     pattern = start_tag + ".*" + end_tag
-     print(f"Pattern {pattern}")
+    print(f"Pattern {pattern}")
     # regex = re.compile(r"^.*interfaceOpDataFile.*$", flags=re.MULTILINE)
     regex = re.compile(pattern, flags=re.MULTILINE)
     # regex = pattern
-     print(f"regex {regex}")
+    print(f"regex {regex}")
 
     replaced = re.sub(regex, lines, filedata)
     #replaced = re.sub(pattern, lines, filedata, flags=re.MULTILINE)
@@ -61,7 +61,7 @@ def replace_text(file_path, start_tag, end_tag, lines):
     # Write the file out again
     with open(file_path, 'w') as file:
         file.write(replaced)
-    
+
     assert filedata != replaced
 
     return None
