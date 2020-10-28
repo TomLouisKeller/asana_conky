@@ -1,8 +1,9 @@
 ## Get all tasks that are due today or prior to today
 import asana
-from datetime import datetime
+
 from helper import get_date_today, print_to_file
 from configuration import Configuration
+from task import Task
 
 
 def main():
@@ -28,23 +29,21 @@ def main():
     for task in tasks:
         if task['due_on'] is not None:
             if task['due_on'] <= today:
-                due_tasks.append(task)
+                due_tasks.append(Task(task['name'], task['due_on'], task['due_at']))
 
     # Sort tasks by due date
-    due_tasks = sorted(due_tasks, key=lambda dt: dt['due_at'] if dt['due_at'] else dt['due_on'])
+    # due_tasks = sorted(due_tasks, key=lambda dt: dt['due_at'] if dt['due_at'] else dt['due_on'])
+    due_tasks = sorted(due_tasks)
 
     # Format
     lines = []
     for dt in due_tasks:
-        due_on = ""
         if config.get('show_time') is False:
-            due_on = datetime.fromisoformat(dt['due_on']).strftime("%d.%m")
-        elif dt['due_at'] is None:  # maybe we have to remove the '        ' if there no items do have due_at
-            due_on = datetime.fromisoformat(dt['due_on']).strftime("%d.%m") + '        '
+            lines.append("{} - {}".format(dt.due_date.strftime("%d.%m"), dt.name))
+        elif dt.due_time is None:  # maybe we have to remove the '        ' if there no items do have due_at
+            lines.append("{}         - {}".format(dt.due_date.strftime("%d.%m"), dt.name))
         else:
-            due_on = datetime.fromisoformat(dt['due_at'][:-1]).strftime("%d.%m %H:%M")
-
-        lines.append("{} - {}".format(due_on, dt['name']))
+            lines.append("{} {} - {}".format(dt.due_date.strftime("%d.%m"), dt.due_time.strftime("%H:%M"), dt.name))
 
     print_to_file(config.get('output_file_path_due_tasks'), lines)
 
