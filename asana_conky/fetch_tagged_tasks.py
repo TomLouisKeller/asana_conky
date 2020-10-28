@@ -5,6 +5,8 @@
 # GET    /tags
 
 import asana
+import re
+
 from helper import print_to_file
 from configuration import Configuration
 from task import Task
@@ -28,6 +30,34 @@ def extract_tasks_from_tag(tag, client):
     for task in tasks:
         lines.append(task.name)
     return lines
+
+
+def replace_text(file_path, start_tag, end_tag, lines):
+
+    if file_path is None or start_tag is None or end_tag is None:
+        print("Will not replace anything since file_path, start_tag or end_tag have not been provided")
+        return
+
+    # Read in the file
+    with open(file_path, 'r') as file:
+        filedata = file.read()
+
+    print(f"filedata {filedata}")
+
+    pattern = start_tag + ".*" + end_tag
+    print(f"Pattern {pattern}")
+    # regex = re.compile(r"^.*interfaceOpDataFile.*$", flags=re.MULTILINE)
+    # regex = re.compile(pattern, flags=re.MULTILINE)
+    regex = pattern
+    print(f"regex {regex}")
+
+    replaced = re.sub(regex, lines, filedata, flags=re.MULTILINE)
+
+    print(f"replaced {replaced}")
+    
+    #Write the file out again
+    with open(file_path, 'w') as file:
+        file.write(replaced)
 
 
 def by_tag_label():
@@ -58,7 +88,12 @@ def by_tag_label():
 
     [print(line) for line in lines]
 
-    print_to_file(config.get('output_file_path_tags'), lines)
+    line_string = ""
+    for line in lines:
+        line_string += line + "\n"
+
+    # print_to_file(config.get('tagged_tasks')['output_path'], lines)
+    replace_text(config.get('tagged_tasks')['output_path'], config.get('tagged_tasks')['start_tag'], config.get('tagged_tasks')['end_tag'], line_string)
 
 
 def by_tag_id():
@@ -84,7 +119,12 @@ def by_tag_id():
 
     # [print(line) for line in lines]
 
-    print_to_file(config.get('output_file_path_tags'), lines)
+    line_string = ""
+    for line in lines:
+        line_string += line + "\n"
+
+    # print_to_file(config.get('tagged_tasks')['output_path'], lines)
+    replace_text(config.get('tagged_tasks')['output_path'], config.get('tagged_tasks')['start_tag'], config.get('tagged_tasks')['end_tag'], line_string)
 
 
 # by_tag_label()

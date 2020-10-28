@@ -1,6 +1,7 @@
-from helper import get_absolute_path
 from typing import Any
 import yaml
+
+from .helper import get_absolute_path
 
 
 class Configuration:
