@@ -11,13 +11,16 @@ due_tasks:
   output_path: 'output/due-tasks.txt'
   start_tag: '#${asana_due_tasks_start}'
   end_tag: '#${asana_due_tasks_end}'
+  # task placeholders are: `task_id`, `task_name`, `task_due_date`, `task_due_time`
   task_format: '${goto 50}{task_due_date} - {task_name}\n'
   
 tagged_tasks:
   output_path: 'output/tags.txt'
   start_tag: '#${asana_tagged_tasks_start}'
   end_tag: '#${asana_tagged_tasks_end}'
+  # tag placeholders are: `tag_id`, `tag_name`
   tag_format: '${voffset 5}${goto 40}${font Bitstream Vera Sans:size=11}${color3}{tag_name}$color$font${voffset 2}\n'
+  # task placeholders are: `task_id`, `task_name`, `task_due_date`, `task_due_time`
   task_format: '${goto 50}{task_name}\n'
 
 # tag-ids can be found in the url after clicking on the tag itself in the Asana web application

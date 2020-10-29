@@ -3,12 +3,13 @@ import asana
 
 from asana_conky.configuration import Configuration
 from asana_conky.task import Task
-from asana_conky.helper import get_date_today, replace_text_in_file
-from asana_conky.asana_service import get_tasks_for_tag, tagged_tasks_to_string, replace_task_in_string
+from asana_conky.helper import get_date_today, replace_text_in_file, get_absolute_path
+from asana_conky.asana_service import replace_task_in_string
 
 
 def fetch_todays_tasks():
     config = Configuration()
+    output_path = get_absolute_path(config.get('due_tasks')['output_path'])
 
     if not config.get('personal_access_token'):
         print("No value for PAT in your console environment")
@@ -26,7 +27,7 @@ def fetch_todays_tasks():
     for task in due_tasks:
         output_string += replace_task_in_string(config.get('due_tasks')['task_format'], task, config)
 
-    replace_text_in_file(config.get('due_tasks')['output_path'], config.get('due_tasks')['start_tag'], config.get('due_tasks')['end_tag'], output_string)
+    replace_text_in_file(output_path, config.get('due_tasks')['start_tag'], config.get('due_tasks')['end_tag'], output_string)
 
 
 def get_due_tasks(client: asana.Client, config: Configuration):
