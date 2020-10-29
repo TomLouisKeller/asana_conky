@@ -21,3 +21,5 @@ class TestReplaceText:
         tagged_tasks = self.config.get('tagged_tasks')
         line_string = "this is the new text"
         replace_text(tagged_tasks['output_path'], tagged_tasks['start_tag'], tagged_tasks['end_tag'], line_string)
+
+        assert True

@@ -6,7 +6,7 @@
 
 import asana
 
-from asana_conky.helper import replace_text  # , print_to_file
+from asana_conky.helper import replace_text_in_file  # , print_to_file
 from asana_conky.configuration import Configuration
 from asana_conky.task import Task
 
@@ -25,9 +25,9 @@ def extract_tasks_from_tag(tag, client):
 
     # Format
     lines = list()
-    lines.append("# {}".format(tag['name']))
+    lines.append("${goto 40}${font Bitstream Vera Sans:size=11}${color3}" + tag['name'] + "$color$font${voffset 2}")
     for task in tasks:
-        lines.append(task.name)
+        lines.append("${goto 50}" + task.name)
     return lines
 
 
@@ -54,7 +54,7 @@ def by_tag_label():
             if is_first:
                 is_first = False
             else:
-                lines.append("")
+                lines.append('${voffset 8}\\')
             lines.extend(extract_tasks_from_tag(tags[config_tag_name], client))
 
     [print(line) for line in lines]
@@ -64,7 +64,7 @@ def by_tag_label():
         line_string += line + "\n"
 
     # print_to_file(config.get('tagged_tasks')['output_path'], lines)
-    replace_text(config.get('tagged_tasks')['output_path'], config.get('tagged_tasks')['start_tag'], config.get('tagged_tasks')['end_tag'], line_string)
+    replace_text_in_file(config.get('tagged_tasks')['output_path'], config.get('tagged_tasks')['start_tag'], config.get('tagged_tasks')['end_tag'], line_string)
 
 
 def by_tag_id():
@@ -84,7 +84,7 @@ def by_tag_id():
         if is_first:
             is_first = False
         else:
-            lines.append("")
+            lines.append('${voffset 8}\\')
 
         lines.extend(extract_tasks_from_tag(tag, client))
 
@@ -95,7 +95,7 @@ def by_tag_id():
         line_string += line + "\n"
 
     # print_to_file(config.get('tagged_tasks')['output_path'], lines)
-    replace_text(config.get('tagged_tasks')['output_path'], config.get('tagged_tasks')['start_tag'], config.get('tagged_tasks')['end_tag'], line_string)
+    replace_text_in_file(config.get('tagged_tasks')['output_path'], config.get('tagged_tasks')['start_tag'], config.get('tagged_tasks')['end_tag'], line_string)
 
 
 if __name__ == '__main__':
