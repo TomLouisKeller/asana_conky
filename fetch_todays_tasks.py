@@ -1,12 +1,13 @@
 ## Get all tasks that are due today or prior to today
 import asana
 
-from asana_conky.helper import get_date_today, print_to_file
 from asana_conky.configuration import Configuration
 from asana_conky.task import Task
+from asana_conky.helper import get_date_today, replace_text_in_file
+from asana_conky.asana_service import get_tasks_for_tag, tagged_tasks_to_string, replace_task_in_string
 
 
-def main():
+def fetch_todays_tasks():
     config = Configuration()
 
     if not config.get('personal_access_token'):
@@ -19,9 +20,18 @@ def main():
     # Set things up to send the name of this script to us to show that you succeeded! This is optional.
     client.options['client_name'] = "asana_get_due_tasks"
 
+    due_tasks = get_due_tasks(client, config)
+
+    output_string = ""
+    for task in due_tasks:
+        output_string += replace_task_in_string(config.get('due_tasks')['task_format'], task, config)
+
+    replace_text_in_file(config.get('due_tasks')['output_path'], config.get('due_tasks')['start_tag'], config.get('due_tasks')['end_tag'], output_string)
+
+
+def get_due_tasks(client: asana.Client, config: Configuration):
     # Request data
-    opt_fields = ['name', 'due_on', 'due_at']
-    tasks = client.tasks.get_tasks_for_user_task_list(config.get('user_task_list_gid'), completed_since='now', opt_fields=opt_fields, opt_pretty=True)
+    tasks = client.tasks.get_tasks_for_user_task_list(config.get('user_task_list_gid'), completed_since='now', opt_fields=['name', 'due_on', 'due_at'])
 
     today = get_date_today()
     # Iterate over tasks, and store only the ones that are due
@@ -29,24 +39,11 @@ def main():
     for task in tasks:
         if task['due_on'] is not None:
             if task['due_on'] <= today:
-                due_tasks.append(Task(task['name'], task['due_on'], task['due_at']))
+                due_tasks.append(Task(task['gid'], task['name'], task['due_on'], task['due_at']))
 
     # Sort tasks by due date
-    # due_tasks = sorted(due_tasks, key=lambda dt: dt['due_at'] if dt['due_at'] else dt['due_on'])
-    due_tasks = sorted(due_tasks)
-
-    # Format
-    lines = []
-    for dt in due_tasks:
-        if config.get('show_time') is False:
-            lines.append("{} - {}".format(dt.due_date.strftime("%d.%m"), dt.name))
-        elif dt.due_time is None:  # maybe we have to remove the '        ' if there no items do have due_at
-            lines.append("{}         - {}".format(dt.due_date.strftime("%d.%m"), dt.name))
-        else:
-            lines.append("{} {} - {}".format(dt.due_date.strftime("%d.%m"), dt.due_time.strftime("%H:%M"), dt.name))
-
-    print_to_file(config.get('output_file_path_due_tasks'), lines)
+    return sorted(due_tasks)
 
 
 if __name__ == '__main__':
-    main()
+    fetch_todays_tasks()

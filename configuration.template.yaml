@@ -2,19 +2,23 @@ personal_access_token: ''
 user_task_list_gid: '' # go to "My Tasks" and copy the long id in the url
 workspace_gid: '' # https://app.asana.com/api/1.0/workspaces (or go to admin console and copy the id from the url)
 
+date_format: '%d.%m'
+time_format: '%H:%M'
+
 # By placing `#${asana_due_tasks_start}` and `#${asana_due_tasks_end}` in a file, the content between the two tags will be replaced
+# Without `start_tag` and `end_tag`, the whole file content will be replaced
 due_tasks:
   output_path: 'output/due-tasks.txt'
   start_tag: '#${asana_due_tasks_start}'
   end_tag: '#${asana_due_tasks_end}'
+  task_format: '${goto 50}{task_due_date} - {task_name}\n'
   
-# Without `start_tag` and `end_tag`, the whole file content will be replaced
 tagged_tasks:
   output_path: 'output/tags.txt'
-  start_tag: ''
-  end_tag: ''
-
-show_time: False
+  start_tag: '#${asana_tagged_tasks_start}'
+  end_tag: '#${asana_tagged_tasks_end}'
+  tag_format: '${voffset 5}${goto 40}${font Bitstream Vera Sans:size=11}${color3}{tag_name}$color$font${voffset 2}\n'
+  task_format: '${goto 50}{task_name}\n'
 
 # tag-ids can be found in the url after clicking on the tag itself in the Asana web application
 tag-ids:
