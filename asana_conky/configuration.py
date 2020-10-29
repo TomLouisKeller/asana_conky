@@ -17,6 +17,7 @@ class Configuration:
     def _load_yaml(path: str) -> dict:
         with open(path, 'r') as stream:
             return yaml.safe_load(stream)
+            #return yaml.load(stream, Loader=yaml.UnsafeLoader)
 
     def get(self, key: str) -> Any:
         return self._config[key]

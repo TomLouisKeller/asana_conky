@@ -28,7 +28,7 @@ def by_tag_id():
         tag = Tag(tag['gid'], tag['name'])
         tagged_tasks[tag] = extract_tasks_from_tag(tag, client)
 
-    output_string = tagged_tasks_to_string(tagged_tasks)
+    output_string = tagged_tasks_to_string(tagged_tasks, config)
 
     replace_text_in_file(config.get('tagged_tasks')['output_path'], config.get('tagged_tasks')['start_tag'], config.get('tagged_tasks')['end_tag'], output_string)
 
@@ -47,15 +47,17 @@ def extract_tasks_from_tag(tag: Tag, client: asana.Client):
     return tasks
 
 
-def tagged_tasks_to_string(tagged_tasks: dict):
+def tagged_tasks_to_string(tagged_tasks: dict, config: Configuration):
     output = ""
 
     for tag in tagged_tasks.keys():
         # Format
         output += '${voffset 8}\\\n'
         output += '${goto 40}${font Bitstream Vera Sans:size=11}${color3}' + tag.name + '$color$font${voffset 2}\n'
+        #output += config.get('tagged_tasks')['tag_format'].format(tag_id=tag.id, tag_name=tag.name)
         for task in tagged_tasks[tag]:
             output += '${goto 50}' + task.name + '\n'
+            #output += config.get('tagged_tasks')['task_format'].format(task_id=task.id, task_name=task.name, task_due_date=task.due_date, task_due_time=task.due_time)
 
     return output
 
