@@ -45,7 +45,7 @@ def replace_text_in_file(file_path, start_tag, end_tag, lines):
         end_tag = ""
         print("start_tag and end_tag have not been provided. Therefore the entire file content will be replaced")
 
-    lines = start_tag + "\n" + lines + "\n" + end_tag
+    lines = start_tag + '\n' + lines + end_tag
 
     # Read in the file
     with open(file_path, 'r') as file:

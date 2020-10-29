@@ -15,10 +15,8 @@ tagged_tasks:
   end_tag: ''
 
 show_time: False
-tag-names: # currently the order of the tag names is not respected, and it loads more data, so we use ids for now
-  - "Main Project"
-  - "Side Project"
-  - "High Priority"
+
+# tag-ids can be found in the url after clicking on the tag itself in the Asana web application
 tag-ids:
   - "123"
   - "456"

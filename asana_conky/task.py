@@ -5,7 +5,8 @@ from datetime import datetime
 
 class Task:
 
-    def __init__(self, name: str, due_on: str, due_at: str):
+    def __init__(self, id, name: str, due_on: str, due_at: str):
+        self.id = id
         self.name = name
 
         if due_at is not None:  # remove the Z at the end of the iso string
