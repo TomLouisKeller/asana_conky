@@ -12,15 +12,14 @@ from asana_conky.task import Task
 
 
 def extract_tasks_from_tag(tag, client):
-    # tasks = client.tasks.get_tasks_for_tag(config.get('user_task_list_gid'), completed_since='now', opt_fields=opt_fields, opt_pretty=True)
-    opt_fields = ['name', 'due_on', 'due_at']
-    api_tasks = client.tasks.get_tasks_for_tag(tag['gid'], completed_since='now', opt_fields=opt_fields, opt_pretty=True)
+    api_tasks = client.tasks.get_tasks_for_tag(tag['gid'], completed_since='now', opt_fields=['name', 'due_on', 'due_at'], opt_pretty=True)
 
-    # Add all tasks to a list, so we can sort it
+    # Extract Tasks from API
     tasks = []
     for task in api_tasks:
         tasks.append(Task(task['name'], task['due_on'], task['due_at']))
 
+    # Sort tasks
     tasks = sorted(tasks)
 
     # Format
@@ -40,25 +39,25 @@ def by_tag_label():
     # Set things up to send the name of this script to us to show that you succeeded! This is optional.
     client.options['client_name'] = "asana_tasks_by_tag_name"
 
+    # API call to get all tags of a certain workpsace
     req_tags = client.tags.get_tags({'workspace': config.get('workspace_gid')}, opt_fields=['name'], opt_pretty=True)
 
-    # Add all tags to a list, so we can sort it
+    # Extract Tags from API call
     tags = dict()
     for req_tag in req_tags:
         tags[req_tag['name']] = req_tag
 
     lines = list()
-    is_first = True
+    lines.append('${voffset 8}\\')
+    # Iterate over the tag names from config
     for config_tag_name in config.get('tag-names'):
         if config_tag_name in tags.keys():
-            if is_first:
-                is_first = False
-            else:
-                lines.append('${voffset 8}\\')
             lines.extend(extract_tasks_from_tag(tags[config_tag_name], client))
 
-    [print(line) for line in lines]
+    # for debug
+    # [print(line) for line in lines]
 
+    # Turn list of strings to string
     line_string = ""
     for line in lines:
         line_string += line + "\n"
@@ -76,18 +75,14 @@ def by_tag_id():
     # Set things up to send the name of this script to us to show that you succeeded! This is optional.
     client.options['client_name'] = "asana_tasks_by_tag_id"
 
-    is_first = True
     lines = list()
+    lines.append('${voffset 8}\\')
+    # Iterate over the tags
     for tag_id in config.get('tag-ids'):
         tag = client.tags.get_tag(tag_id, opt_fields=['name'], opt_pretty=True)
-
-        if is_first:
-            is_first = False
-        else:
-            lines.append('${voffset 8}\\')
-
         lines.extend(extract_tasks_from_tag(tag, client))
 
+    # for debug
     # [print(line) for line in lines]
 
     line_string = ""
@@ -99,5 +94,5 @@ def by_tag_id():
 
 
 if __name__ == '__main__':
-    # by_tag_label()
-    by_tag_id()
+    by_tag_label()
+    # by_tag_id()
