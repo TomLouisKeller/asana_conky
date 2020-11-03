@@ -1,5 +1,5 @@
-personal_access_token: ''
-user_task_list_gid: '' # go to "My Tasks" and copy the long id in the url
+personal_access_token: '' # click on avatar (top left), go to `Apps` -> `Manage Developer Apps` -> `New access token`
+user_task_list_gid: '' # go to `My Tasks` and copy the long id in the url
 workspace_gid: '' # https://app.asana.com/api/1.0/workspaces (or go to admin console and copy the id from the url)
 
 date_format: '%d.%m'
