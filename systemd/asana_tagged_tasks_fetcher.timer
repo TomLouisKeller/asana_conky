@@ -1,0 +1,11 @@
+[Unit]
+Description=Fetch tags from asana and store them in a file once a day
+
+[Timer]
+Persistent=true
+#OnBootSec=10min
+#OnUnitActiveSec=24h
+OnCalendar=*-*-* 00:00:00
+
+[Install]
+WantedBy=timers.target

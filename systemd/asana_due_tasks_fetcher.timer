@@ -1,0 +1,11 @@
+[Unit]
+Description=Fetch due tasks from asana every half hour(xx:00, xx:30) and store them in a file
+
+[Timer]
+Persistent=true
+OnBootSec=5min
+#OnUnitActiveSec=6h 
+OnCalendar=*-*-* *:0,30:00
+
+[Install]
+WantedBy=timers.target

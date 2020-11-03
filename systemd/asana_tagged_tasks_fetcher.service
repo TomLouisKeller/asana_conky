@@ -1,0 +1,8 @@
+[Unit]
+Description=Fetch tags from asana and store them in a file
+
+[Service]
+Type=simple
+Nice=10
+RuntimeMaxSec=300
+ExecStart=python ~/software/asana_conky/fetch_tagged_tasks.py
