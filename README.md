@@ -10,7 +10,7 @@ in order to display it on the desktop
 1. Copy `configuration.template.yaml` and rename it to `configuration.yaml`
 2. Fill out the configuration based on the comments within
 3. Add the start and end tags to your conky conf file
-4. `pip install asana==0.10.3`
+4. `pip install .` (or `pip install -e .` if you plan on editing the code)
 5. run the program  
   a. `python fetch_tagged_tasks.py`   
   b. `python fetch_todays_tasks.py`
