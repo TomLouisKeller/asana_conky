@@ -2,7 +2,8 @@
 
 ## Description
 
-fetch asana tasks and write them to a (conky config) file
+fetch asana tasks and write them to a (conky config) file  
+in order to display it on the desktop
 
 ## Install
 
