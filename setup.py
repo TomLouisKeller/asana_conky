@@ -13,7 +13,7 @@ from setuptools import find_packages, setup, Command
 
 # Package meta-data.
 NAME = 'asana_conky'
-DESCRIPTION = 'program to fetch asana tasks and write them to file'
+DESCRIPTION = 'fetch asana tasks and write them to a (conky config) file'
 URL = ''
 EMAIL = 'me@tomlouiskeller.com'
 AUTHOR = 'Tom Louis Keller'
