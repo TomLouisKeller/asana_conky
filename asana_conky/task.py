@@ -19,7 +19,7 @@ class Task:
             if datetime.fromisoformat(due_on).strftime("%y-%d-%m") != datetime.fromisoformat(due_at).strftime("%y-%d-%m"):
                 raise("due_on and due_at are not on the same date! what now?")
             else:
-                self.due_date = datetime.fromisoformat(due_at).date()
+                self.due_date = datetime.fromisoformat(due_on).date()
                 self.due_time = datetime.fromisoformat(due_at).time()
         elif due_on is not None:
             self.due_date = datetime.fromisoformat(due_on).date()

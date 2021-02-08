@@ -6,6 +6,8 @@ from asana_conky.task import Task
 from asana_conky.helper import get_date_today, replace_text_in_file, get_absolute_path
 from asana_conky.asana_service import replace_task_in_string
 
+from datetime import datetime
+
 
 def fetch_todays_tasks():
     config = Configuration()
@@ -24,13 +26,19 @@ def fetch_todays_tasks():
     due_tasks = get_due_tasks(client, config)
 
     output_string = ""
+    now = datetime.now()
+    date_now = now.date()
+    time_now = now.time()
     for task in due_tasks:
-        output_string += replace_task_in_string(config.get('due_tasks')['task_format'], task, config)
+        if task.due_date < date_now and (task.due_time is None or task.due_time < time_now):
+            output_string += replace_task_in_string(config.get('due_tasks')['task_format_before'], task, config)
+        else:
+            output_string += replace_task_in_string(config.get('due_tasks')['task_format_today'], task, config)
 
     replace_text_in_file(output_path, config.get('due_tasks')['start_tag'], config.get('due_tasks')['end_tag'], output_string)
 
 
-def get_due_tasks(client: asana.Client, config: Configuration):
+def get_due_tasks(client: asana.Client, config: Configuration) -> [Task]:
     # Request data
     tasks = client.tasks.get_tasks_for_user_task_list(config.get('user_task_list_gid'), completed_since='now', opt_fields=['name', 'due_on', 'due_at'])
 
