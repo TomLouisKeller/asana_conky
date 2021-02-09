@@ -12,8 +12,8 @@ due_tasks:
   start_tag: '#${asana_due_tasks_start}'
   end_tag: '#${asana_due_tasks_end}'
   # task placeholders are: `task_id`, `task_name`, `task_due_date`, `task_due_time`
-  task_format_before: '${goto 50}${color1}{task_due_date} - {task_name}$color\n'
-  task_format_today: '${goto 50}${color2}{task_due_date} - {task_name}$color\n'
+  task_format_past_due: '${goto 50}${color1}{task_due_date} - {task_name}$color\n'
+  task_format_due_today: '${goto 50}${color2}{task_due_date} - {task_name}$color\n'
   
 tagged_tasks:
   output_path: 'output/tags.txt'

@@ -27,13 +27,14 @@ def fetch_todays_tasks():
 
     output_string = ""
     now = datetime.now()
-    date_now = now.date()
-    time_now = now.time()
+    now_date = now.date()
+    now_time = now.time()
     for task in due_tasks:
-        if task.due_date < date_now and (task.due_time is None or task.due_time < time_now):
-            output_string += replace_task_in_string(config.get('due_tasks')['task_format_before'], task, config)
+        if task.due_date < now_date \
+           or (task.due_date == now_date and task.due_time is not None and task.due_time < now_time):
+            output_string += replace_task_in_string(config.get('due_tasks')['task_format_past_due'], task, config)
         else:
-            output_string += replace_task_in_string(config.get('due_tasks')['task_format_today'], task, config)
+            output_string += replace_task_in_string(config.get('due_tasks')['task_format_due_today'], task, config)
 
     replace_text_in_file(output_path, config.get('due_tasks')['start_tag'], config.get('due_tasks')['end_tag'], output_string)
 
